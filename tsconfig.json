@@ -8,7 +8,7 @@
     "baseUrl": ".",
     "removeComments": true,
     "noEmitOnError": true,
-    "skipDefaultLibCheck": true,
+    "skipDefaultLibCheck": false,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
@@ -26,7 +26,6 @@
       "@inputs/*": ["./src/inputs/*"],
       "@inputs": ["./src/inputs/index.ts"],
       "@src/*": ["./src/*"],
-      "@database/*": ["./src/database/*"],
       "@logger": ["./src/logger/index.ts"]
     },
     "typeRoots": ["node_modules/@types", "src/@types"]

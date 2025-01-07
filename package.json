@@ -7,7 +7,8 @@
     "dev": "tsx watch src/index",
     "build": "tsup src",
     "test": "vitest",
-    "start": "node dist/index"
+    "start": "node dist/index",
+    "db:migrate:dev": "prisma migrate dev"
   },
   "devDependencies": {
     "@types/node": "^22.9.0",
@@ -20,13 +21,13 @@
   },
   "dependencies": {
     "@apollo/server": "^4.11.2",
+    "@prisma/client": "6.2.0",
     "dotenv": "^16.4.5",
     "graphql": "^16.9.0",
     "graphql-scalars": "^1.23.0",
-    "pg": "^8.13.1",
+    "prisma": "^6.2.0",
     "reflect-metadata": "^0.2.2",
     "type-graphql": "^2.0.0-rc.2",
-    "typeorm": "^0.3.20",
     "winston": "^3.17.0"
   }
 }
