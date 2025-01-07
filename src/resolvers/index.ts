@@ -1,5 +1,5 @@
-import { HelloWorldResolver } from './hello-world.resolver';
+import { UserResolver } from './user.resolver';
 
 export {
-  HelloWorldResolver,
+  UserResolver,
 };

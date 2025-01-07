@@ -1,5 +1,5 @@
-import { HelloWorld } from './hello-world.schema';
+import { User } from './user.schema';
 
 export {
-  HelloWorld,
+  User,
 };
