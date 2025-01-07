@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 import { HelloWorldResolver } from '@resolvers';
 import { ApolloServer } from '@apollo/server';
@@ -13,7 +12,7 @@ export async function server() {
 
   const { url } = await startStandaloneServer(server, {
     listen: {
-      port: Number(process.env.SERVER_PORT),
+      port: +process.env.SERVER_PORT,
     },
   });
 
