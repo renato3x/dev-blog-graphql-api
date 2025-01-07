@@ -26,7 +26,8 @@
       "@inputs/*": ["./src/inputs/*"],
       "@inputs": ["./src/inputs/index.ts"],
       "@src/*": ["./src/*"],
-      "@database/*": ["./src/database/*"]
+      "@database/*": ["./src/database/*"],
+      "@logger": ["./src/logger/index.ts"]
     },
     "typeRoots": ["node_modules/@types", "src/@types"]
   }

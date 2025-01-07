@@ -3,12 +3,13 @@ import 'dotenv/config';
 
 import { server } from './server';
 import { dataSource } from '@database/data-source';
+import { logger } from '@logger';
 
 dataSource.initialize()
 .then(() => {
-  console.log('Server connected to the database');
+  logger.info('Server connected to the database')
   server();
 })
 .catch((error) => {
-  console.log('Unexpected error at connecting to database');
+  logger.error('Unexpected error at connecting to database', error);
 });

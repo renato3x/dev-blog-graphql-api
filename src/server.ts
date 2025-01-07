@@ -2,6 +2,7 @@ import { buildSchema } from 'type-graphql';
 import { HelloWorldResolver } from '@resolvers';
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
+import { logger } from '@logger';
 
 export async function server() {
   const schema = await buildSchema({
@@ -16,7 +17,7 @@ export async function server() {
     },
   });
 
-  console.log(`Server open in ${url}`);
+  logger.info(`Server open in ${url}`);
 
   return server;
 }
