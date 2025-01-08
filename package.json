@@ -33,6 +33,7 @@
     "dotenv": "^16.4.5",
     "graphql": "^16.9.0",
     "graphql-scalars": "^1.23.0",
+    "inversify": "^6.2.1",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",
     "prisma": "^6.2.0",

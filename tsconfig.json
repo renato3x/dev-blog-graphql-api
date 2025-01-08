@@ -21,10 +21,11 @@
     "paths": {
       "@models/*": ["./src/models/*"],
       "@resolvers/*": ["./src/resolvers/*"],
-      "@logger": ["./src/logger/index.ts"],
       "@repositories/*": ["./src/repositories/*"],
       "@database/*": ["./src/database/*"],
-      "@services/*": ["./src/services/*"]
+      "@services/*": ["./src/services/*"],
+      "@ioc/*": ["./src/ioc/*"],
+      "@logger": ["./src/logger/index.ts"],
     },
     "typeRoots": ["node_modules/@types", "src/@types"]
   }
