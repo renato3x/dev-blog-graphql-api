@@ -1,20 +1,13 @@
-import { createLogger, format, transports, addColors } from 'winston';
+import path from 'path';
+import pino from 'pino';
 
-addColors({
-  error: 'red',
-  warn: 'yellow',
-  info: 'green',
-  debug: 'blue',
-  silly: 'magenta',
-});
-
-export const logger = createLogger({
-  format: format.combine(
-    format.colorize(),
-    format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-    format.printf(({ level, message, timestamp }) => {
-      return `[${timestamp}] ${level}: ${message}`;
-    }),
-  ),
-  transports: [new transports.Console()],
+export const logger = pino({
+  level: 'trace',
+  transport: {
+    target: 'pino-pretty',
+    options: {
+      colorize: true,
+      translateTime: 'yyyy-mm-dd HH:MM:ss',
+    },
+  },
 });
