@@ -5,7 +5,7 @@ import { startStandaloneServer } from '@apollo/server/standalone';
 import { logger } from '@logger';
 import { BaseContext } from '@apollo/server';
 
-export async function server(): Promise<ApolloServer<BaseContext>> {
+export async function bootstrap(): Promise<ApolloServer<BaseContext>> {
   const schema = await buildSchema({
     resolvers: [UserResolver],
   });

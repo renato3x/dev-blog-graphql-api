@@ -14,11 +14,11 @@ export class User {
   @Field(() => String)
   email: string;
 
-  @Field(() => String)
-  biography: string;
+  @Field(() => String, { nullable: true })
+  biography: string | null;
 
-  @Field(() => String)
-  profileImage: string;
+  @Field(() => String, { nullable: true })
+  profileImage: string | null;
 
   @Field(() => Date)
   createdAt: Date;

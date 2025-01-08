@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import 'dotenv/config';
 
-import { server } from './server';
+import { bootstrap } from './server';
 
-server();
+bootstrap();

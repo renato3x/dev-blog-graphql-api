@@ -15,7 +15,7 @@ export class UserRepository implements IRepository<User, string, 'id'> {
     throw new Error('Method not implemented.');
   }
 
-  async update(id: string, data: Omit<User, 'id'>): Promise<{ name: string; id: string; username: string; email: string; password: string; biography: string | null; profileImage: string | null; createdAt: Date; updatedAt: Date; }> {
+  async update(id: string, data: Omit<User, 'id'>): Promise<User> {
     throw new Error('Method not implemented.');
   }
 
