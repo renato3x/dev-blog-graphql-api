@@ -3,8 +3,9 @@ import { UserResolver } from '@resolvers';
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { logger } from '@logger';
+import { BaseContext } from '@apollo/server';
 
-export async function server() {
+export async function server(): Promise<ApolloServer<BaseContext>> {
   const schema = await buildSchema({
     resolvers: [UserResolver],
   });

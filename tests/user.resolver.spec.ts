@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import 'dotenv/config';
 
-import { server } from '@src/server'
+import { server } from '@src/server';
 import { beforeAll, describe, expect, test } from 'vitest';
 
 let apolloServer: Awaited<ReturnType<typeof server>>;
@@ -19,7 +19,7 @@ describe('User queries', () => {
           name
         }
       }
-    `
+    `;
 
     const response = await apolloServer.executeOperation({ query });
 
@@ -29,4 +29,4 @@ describe('User queries', () => {
       throw new Error('Unexpected response kind: ' + response.body.kind);
     }
   });
-})
+});

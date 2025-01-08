@@ -13,10 +13,8 @@ export const logger = createLogger({
     format.colorize(),
     format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
     format.printf(({ level, message, timestamp }) => {
-      return `[${timestamp}] ${level}: ${message}`
+      return `[${timestamp}] ${level}: ${message}`;
     }),
   ),
-  transports: [
-    new transports.Console(),
-  ]
+  transports: [new transports.Console()],
 });
