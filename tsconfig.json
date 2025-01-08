@@ -23,6 +23,8 @@
       "@resolvers/*": ["./src/resolvers/*"],
       "@logger": ["./src/logger/index.ts"],
       "@app/*": ["./src/*"],
+      "@repositories/*": ["./src/repositories/*"],
+      "@database/*": ["./src/database/*"],
     },
     "typeRoots": ["node_modules/@types", "src/@types"]
   }
