@@ -1,5 +1,5 @@
 import { User } from '@models/user.schema';
-import { UserService } from 'src/services/user.service';
+import { UserService } from '@services/user.service';
 import { Query, Resolver } from 'type-graphql';
 
 @Resolver()

@@ -24,6 +24,7 @@
       "@logger": ["./src/logger/index.ts"],
       "@repositories/*": ["./src/repositories/*"],
       "@database/*": ["./src/database/*"],
+      "@services/*": ["./src/services/*"]
     },
     "typeRoots": ["node_modules/@types", "src/@types"]
   }
