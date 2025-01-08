@@ -1,5 +1,5 @@
 import { buildSchema } from 'type-graphql';
-import { UserResolver } from '@resolvers';
+import { UserResolver } from '@resolvers/user.resolver';
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { logger } from '@logger';

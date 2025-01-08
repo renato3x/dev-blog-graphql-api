@@ -1,4 +1,4 @@
-import { User } from '@schemas/user.schema';
+import { User } from '@models/user.schema';
 import { Query, Resolver } from 'type-graphql';
 
 @Resolver()

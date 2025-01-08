@@ -1,4 +1,3 @@
-import path from 'path';
 import pino from 'pino';
 
 export const logger = pino({

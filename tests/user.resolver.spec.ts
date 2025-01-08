@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import 'dotenv/config';
 
-import { server } from '@src/server';
+import { server } from '@app/server';
 import { beforeAll, describe, expect, test } from 'vitest';
 
 let apolloServer: Awaited<ReturnType<typeof server>>;

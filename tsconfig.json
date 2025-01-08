@@ -19,14 +19,10 @@
     "outDir": "dist",
     "strictPropertyInitialization": false,
     "paths": {
-      "@schemas/*": ["./src/schemas/*"],
-      "@schemas": ["./src/schemas/index.ts"],
+      "@models/*": ["./src/models/*"],
       "@resolvers/*": ["./src/resolvers/*"],
-      "@resolvers": ["./src/resolvers/index.ts"],
-      "@inputs/*": ["./src/inputs/*"],
-      "@inputs": ["./src/inputs/index.ts"],
-      "@src/*": ["./src/*"],
-      "@logger": ["./src/logger/index.ts"]
+      "@logger": ["./src/logger/index.ts"],
+      "@app/*": ["./src/*"],
     },
     "typeRoots": ["node_modules/@types", "src/@types"]
   }
