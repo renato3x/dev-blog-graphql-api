@@ -2,7 +2,8 @@ import { User } from '@models/user.schema';
 import { UserService } from '@services/user.service';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '@ioc/types';
-import { Query, Resolver } from 'type-graphql';
+import { Arg, Mutation, Query, Resolver } from 'type-graphql';
+import { CreateUserInput } from '@dto/create-user.input';
 
 @Resolver()
 @injectable()
@@ -14,5 +15,13 @@ export class UserResolver {
   @Query(() => [User])
   async users(): Promise<User[]> {
     return await this.userService.findAll();
+  }
+
+  @Mutation(() => User)
+  async createUser(
+    @Arg('data', () => CreateUserInput) data: CreateUserInput
+  ): Promise<User> {
+    const user = await this.userService.create(data);
+    return user;
   }
 }

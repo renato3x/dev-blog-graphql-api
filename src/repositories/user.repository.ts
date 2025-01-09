@@ -18,8 +18,8 @@ export class UserRepository implements IRepository<User, string, 'id'> {
     throw new Error('Method not implemented.');
   }
 
-  async create(data: Omit<User, 'id'>): Promise<User> {
-    throw new Error('Method not implemented.');
+  async create(data: Omit<User, 'id' | 'createdAt' | 'updatedAt'>): Promise<User> {
+    return await this.client.user.create({ data });
   }
 
   async update(id: string, data: Omit<User, 'id'>): Promise<User> {

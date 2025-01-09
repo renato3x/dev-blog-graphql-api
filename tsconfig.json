@@ -26,6 +26,7 @@
       "@services/*": ["./src/services/*"],
       "@config/*": ["./src/config/*"],
       "@middlewares/*": ["./src/middlewares/*"],
+      "@dto/*": ["./src/dto/*"],
       "@ioc/*": ["./src/ioc/*"],
       "@logger": ["./src/logger/index.ts"],
     },
