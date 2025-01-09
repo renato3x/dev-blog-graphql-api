@@ -7,6 +7,7 @@ import { faker } from '@faker-js/faker';
 import { USER_FRAGMENT } from './utils/fragments/user.fragment';
 
 let apolloServer: Awaited<ReturnType<typeof bootstrap>>;
+let userId: string = '';
 
 beforeAll(async () => {
   apolloServer = await bootstrap();
@@ -42,7 +43,7 @@ describe('User queries', () => {
       }
     `;
 
-    const response = await apolloServer.executeOperation({
+    const response = await apolloServer.executeOperation<{ createUser: { id: string; } }>({
       query: CREATE_USER_MUTATION,
       variables: {
         data: {
@@ -59,6 +60,8 @@ describe('User queries', () => {
       expect(response.body.singleResult.data?.createUser).toHaveProperty('id');
       expect(response.body.singleResult.data?.createUser).toHaveProperty('createdAt');
       expect(response.body.singleResult.data?.createUser).toHaveProperty('updatedAt');
+
+      userId = response.body.singleResult.data?.createUser.id as string;
     } else {
       throw new Error('Unexpected response kind: ' + response.body.kind);
     }
@@ -77,7 +80,7 @@ describe('User queries', () => {
     const response = await apolloServer.executeOperation({
       query: SEARCH_USER_BY_ID_QUERY,
       variables: {
-        id: '9f7a6f8c-4c03-402c-b3b2-4bddf0b5f4f0',
+        id: userId,
       },
     });
 
