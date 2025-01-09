@@ -6,16 +6,18 @@ import { PrismaClient } from '@prisma/client';
 
 @injectable()
 export class UserRepository implements IRepository<User, string, 'id'> {
-  constructor(
-    @inject(TYPES.DatabaseClient) private client: PrismaClient
-  ) {}
+  constructor(@inject(TYPES.DatabaseClient) private client: PrismaClient) {}
 
   async findAll(): Promise<User[]> {
     return await this.client.user.findMany();
   }
 
   async findById(id: string): Promise<User | null> {
-    throw new Error('Method not implemented.');
+    return await this.client.user.findUnique({
+      where: {
+        id,
+      },
+    });
   }
 
   async create(data: Omit<User, 'id' | 'createdAt' | 'updatedAt'>): Promise<User> {
@@ -29,5 +31,4 @@ export class UserRepository implements IRepository<User, string, 'id'> {
   async delete(id: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
-
 }

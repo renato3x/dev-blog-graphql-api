@@ -6,12 +6,13 @@ import { logger } from '@logger';
 import { BaseContext } from '@apollo/server';
 import { container } from '@ioc/container';
 import { LoggerMiddleware } from '@middlewares/logger.middleware';
+import { ErrorHandlerMiddleware } from '@middlewares/error-handler.middleware';
 
 export async function bootstrap(): Promise<ApolloServer<BaseContext>> {
   const schema = await buildSchema({
     resolvers: [UserResolver],
     container: () => container,
-    globalMiddlewares: [LoggerMiddleware]
+    globalMiddlewares: [LoggerMiddleware, ErrorHandlerMiddleware],
   });
 
   const server = new ApolloServer({ schema });

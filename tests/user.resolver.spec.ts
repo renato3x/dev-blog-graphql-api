@@ -50,8 +50,8 @@ describe('User queries', () => {
           username: faker.internet.username(),
           email: faker.internet.email().toLowerCase(),
           password: faker.internet.password({ length: 8 }),
-        }
-      }
+        },
+      },
     });
 
     if (response.body.kind === 'single') {

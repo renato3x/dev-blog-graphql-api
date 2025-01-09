@@ -1,3 +1,1 @@
-export interface IContext {
-  
-}
+export interface IContext {}

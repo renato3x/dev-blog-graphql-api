@@ -8,19 +8,20 @@ import { CreateUserInput } from '@dto/create-user.input';
 @Resolver()
 @injectable()
 export class UserResolver {
-  constructor(
-    @inject(TYPES.UserService) private userService: UserService
-  ) {}
+  constructor(@inject(TYPES.UserService) private userService: UserService) {}
 
   @Query(() => [User])
   async users(): Promise<User[]> {
     return await this.userService.findAll();
   }
 
+  @Query(() => User)
+  async user(@Arg('id', () => String) id: string): Promise<User> {
+    return await this.userService.findById(id);
+  }
+
   @Mutation(() => User)
-  async createUser(
-    @Arg('data', () => CreateUserInput) data: CreateUserInput
-  ): Promise<User> {
+  async createUser(@Arg('data', () => CreateUserInput) data: CreateUserInput): Promise<User> {
     const user = await this.userService.create(data);
     return user;
   }

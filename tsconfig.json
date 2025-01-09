@@ -28,6 +28,7 @@
       "@middlewares/*": ["./src/middlewares/*"],
       "@dto/*": ["./src/dto/*"],
       "@ioc/*": ["./src/ioc/*"],
+      "@errors/*": ["./src/errors/*"],
       "@logger": ["./src/logger/index.ts"],
     },
     "typeRoots": ["node_modules/@types", "src/@types"]
