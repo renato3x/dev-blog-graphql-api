@@ -36,14 +36,14 @@ describe('User queries', () => {
   test('create a new user and returns the saved user', async () => {
     const CREATE_USER_MUTATION = `
       ${USER_FRAGMENT}
-      mutation ($data: CreateUserInput!) {
+      mutation($data: CreateUserInput!) {
         createUser(data: $data) {
           ...UserFragment
         }
       }
     `;
 
-    const response = await apolloServer.executeOperation<{ createUser: { id: string; } }>({
+    const response = await apolloServer.executeOperation<{ createUser: { id: string } }>({
       query: CREATE_USER_MUTATION,
       variables: {
         data: {
@@ -70,7 +70,7 @@ describe('User queries', () => {
   test('search and return an user by id', async () => {
     const SEARCH_USER_BY_ID_QUERY = `
       ${USER_FRAGMENT}
-      query ($id: String!) {
+      query($id: String!) {
         user(id: $id) {
           ...UserFragment
         }
@@ -91,6 +91,64 @@ describe('User queries', () => {
       expect(response.body.singleResult.data?.user).toHaveProperty('username');
       expect(response.body.singleResult.data?.user).toHaveProperty('createdAt');
       expect(response.body.singleResult.data?.user).toHaveProperty('updatedAt');
+    } else {
+      throw new Error('Unexpected response kind: ' + response.body.kind);
+    }
+  });
+
+  test('update data from user by id', async () => {
+    const UPDATE_USER_DATA_MUTATION = `
+      ${USER_FRAGMENT}
+      mutation($id: String!, $data: UpdateUserInput!) {
+        updateUser(id: $id, data: $data) {
+          ...UserFragment
+        }
+      }
+    `;
+
+    const data = {
+      username: faker.internet.username().toLowerCase(),
+      email: faker.internet.email().toLowerCase(),
+    };
+
+    const response = await apolloServer.executeOperation({
+      query: UPDATE_USER_DATA_MUTATION,
+      variables: {
+        id: userId,
+        data,
+      },
+    });
+
+    if (response.body.kind === 'single') {
+      expect(response.body.singleResult.errors).toBeUndefined();
+      expect(response.body.singleResult.data?.updateUser).toHaveProperty('id');
+      expect(response.body.singleResult.data?.updateUser).toHaveProperty('name');
+      expect(response.body.singleResult.data?.updateUser).toHaveProperty('username');
+      expect(response.body.singleResult.data?.updateUser).toHaveProperty('createdAt');
+      expect(response.body.singleResult.data?.updateUser).toHaveProperty('updatedAt');
+    } else {
+      throw new Error('Unexpected response kind: ' + response.body.kind);
+    }
+  });
+
+  test('delete an user by id', async () => {
+    const DELETE_USER_MUTATION = `
+      mutation($id: String!) {
+        deleteUser(id: $id)
+      }
+    `;
+
+    const response = await apolloServer.executeOperation({
+      query: DELETE_USER_MUTATION,
+      variables: {
+        id: userId,
+      },
+    });
+
+    if (response.body.kind === 'single') {
+      expect(response.body.singleResult.errors).toBeUndefined();
+      expect(response.body.singleResult.data?.deleteUser).toBeDefined();
+      expect(typeof response.body.singleResult.data?.deleteUser === 'string').toBe(true);
     } else {
       throw new Error('Unexpected response kind: ' + response.body.kind);
     }

@@ -24,11 +24,18 @@ export class UserRepository implements IRepository<User, string, 'id'> {
     return await this.client.user.create({ data });
   }
 
-  async update(id: string, data: Omit<User, 'id'>): Promise<User> {
-    throw new Error('Method not implemented.');
+  async update(id: string, data: Partial<User>): Promise<User> {
+    return await this.client.user.update({
+      where: { id },
+      data,
+    });
   }
 
   async delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+    await this.client.user.delete({
+      where: {
+        id,
+      },
+    });
   }
 }
