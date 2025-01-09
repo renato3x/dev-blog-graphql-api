@@ -40,8 +40,16 @@ export default [
       'comma-dangle': ['error', 'always-multiline'],
       'prefer-const': 'error',
       'no-var': 'error',
+      'no-unused-vars': 'off',
       '@typescript-eslint/explicit-function-return-type': 'error',
-      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
       'eol-last': ['error', 'always'],
       'no-trailing-spaces': 'error',
       'no-template-curly-in-string': 'error',

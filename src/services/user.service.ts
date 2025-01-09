@@ -14,7 +14,7 @@ export class UserService {
     const users = await this.userRepository.findAll();
 
     return users.map((users) => {
-      const { password, ...publicUser } = users;
+      const { password: _password, ...publicUser } = users;
       return publicUser;
     });
   }
@@ -23,7 +23,7 @@ export class UserService {
     const user = await this.userRepository.findById(id);
 
     if (user) {
-      const { password, ...publicUser } = user;
+      const { password: _password, ...publicUser } = user;
       return publicUser;
     }
 
@@ -39,7 +39,7 @@ export class UserService {
       password: hash,
     });
 
-    const { password, ...publicUser } = user;
+    const { password: _password, ...publicUser } = user;
 
     return publicUser;
   }
