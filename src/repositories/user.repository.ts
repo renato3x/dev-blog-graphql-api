@@ -1,12 +1,17 @@
 import { User } from '@prisma/client';
 import { IRepository } from './repository.interface';
-import { client } from '@database/client';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
+import { TYPES } from '@ioc/types';
+import { PrismaClient } from '@prisma/client';
 
 @injectable()
 export class UserRepository implements IRepository<User, string, 'id'> {
+  constructor(
+    @inject(TYPES.DatabaseClient) private client: PrismaClient
+  ) {}
+
   async findAll(): Promise<User[]> {
-    return await client.user.findMany();
+    return await this.client.user.findMany();
   }
 
   async findById(id: string): Promise<User | null> {
