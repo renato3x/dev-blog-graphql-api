@@ -4,6 +4,7 @@ import 'dotenv/config';
 import { bootstrap } from '../src/server';
 import { beforeAll, describe, expect, test } from 'vitest';
 import { faker } from '@faker-js/faker';
+import { USER_FRAGMENT } from './utils/fragments/user.fragment';
 
 let apolloServer: Awaited<ReturnType<typeof bootstrap>>;
 
@@ -33,14 +34,7 @@ describe('User queries', () => {
 
   test('create a new user and returns the saved user', async () => {
     const CREATE_USER_MUTATION = `
-      fragment UserFragment on User {
-        id
-        name
-        username
-        createdAt
-        updatedAt
-      }
-
+      ${USER_FRAGMENT}
       mutation ($data: CreateUserInput!) {
         createUser(data: $data) {
           ...UserFragment
@@ -65,6 +59,35 @@ describe('User queries', () => {
       expect(response.body.singleResult.data?.createUser).toHaveProperty('id');
       expect(response.body.singleResult.data?.createUser).toHaveProperty('createdAt');
       expect(response.body.singleResult.data?.createUser).toHaveProperty('updatedAt');
+    } else {
+      throw new Error('Unexpected response kind: ' + response.body.kind);
+    }
+  });
+
+  test('search and return an user by id', async () => {
+    const SEARCH_USER_BY_ID_QUERY = `
+      ${USER_FRAGMENT}
+      query ($id: String!) {
+        user(id: $id) {
+          ...UserFragment
+        }
+      }
+    `;
+
+    const response = await apolloServer.executeOperation({
+      query: SEARCH_USER_BY_ID_QUERY,
+      variables: {
+        id: '9f7a6f8c-4c03-402c-b3b2-4bddf0b5f4f0',
+      },
+    });
+
+    if (response.body.kind === 'single') {
+      expect(response.body.singleResult.errors).toBeUndefined();
+      expect(response.body.singleResult.data?.user).toHaveProperty('id');
+      expect(response.body.singleResult.data?.user).toHaveProperty('name');
+      expect(response.body.singleResult.data?.user).toHaveProperty('username');
+      expect(response.body.singleResult.data?.user).toHaveProperty('createdAt');
+      expect(response.body.singleResult.data?.user).toHaveProperty('updatedAt');
     } else {
       throw new Error('Unexpected response kind: ' + response.body.kind);
     }
