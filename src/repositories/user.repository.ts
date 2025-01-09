@@ -5,7 +5,7 @@ import { TYPES } from '@ioc/types';
 import { PrismaClient } from '@prisma/client';
 
 @injectable()
-export class UserRepository implements IRepository<User, string, 'id'> {
+export class UserRepository implements IRepository<User, string, 'id' | 'createdAt' | 'updatedAt'> {
   constructor(@inject(TYPES.DatabaseClient) private client: PrismaClient) {}
 
   async findAll(): Promise<User[]> {

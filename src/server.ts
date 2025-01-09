@@ -20,10 +20,11 @@ export async function bootstrap(): Promise<ApolloServer<BaseContext>> {
   const { url } = await startStandaloneServer(server, {
     listen: {
       port: +process.env.SERVER_PORT,
+      path: '/api/graphql/',
     },
   });
 
-  logger.info(`Server open in ${url}`);
+  logger.info(`Server open in ${url}api/graphql/`);
 
   return server;
 }
