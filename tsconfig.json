@@ -24,6 +24,8 @@
       "@repositories/*": ["./src/repositories/*"],
       "@database/*": ["./src/database/*"],
       "@services/*": ["./src/services/*"],
+      "@config/*": ["./src/config/*"],
+      "@middlewares/*": ["./src/middlewares/*"],
       "@ioc/*": ["./src/ioc/*"],
       "@logger": ["./src/logger/index.ts"],
     },
