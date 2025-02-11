@@ -1,0 +1,31 @@
+name: Run tests on server
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn
+      
+      - name: Setup environment variables
+        run: |
+          echo "SERVER_PORT=${{ secrets.SERVER_PORT }}" >> $GITHUB_ENV
+          echo "DATABASE_URL={{ secrets.DATABASE_URL }}$" >> $GITHUB_ENV
+
+      - name: Run development migrations
+        run: yarn db:migrate:dev
+      
+      - name: Run tests
+        run: yarn test
