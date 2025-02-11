@@ -22,8 +22,8 @@ jobs:
       
       - name: Setup environment variables
         run: |
-          echo "SERVER_PORT=${{ secrets.SERVER_PORT }}" >> $GITHUB_ENV
-          echo "DATABASE_URL={{ secrets.DATABASE_URL }}$" >> $GITHUB_ENV
+          echo "SERVER_PORT=${{ secrets.SERVER_PORT }}" >> .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
 
       - name: Run development migrations
         run: yarn db:migrate:dev
