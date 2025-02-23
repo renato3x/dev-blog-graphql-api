@@ -22,7 +22,7 @@ jobs:
           version: 10
 
       - name: Install dependencies
-        run: pnpm --shamefully-hoist
+        run: pnpm install --shamefully-hoist
       
       - name: Setup environment variables
         run: |
