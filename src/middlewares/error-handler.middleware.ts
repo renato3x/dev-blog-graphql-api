@@ -1,4 +1,5 @@
 import { IContext } from '@config/context.interface';
+import { ErrorCodes } from '@enums/error-codes.enum';
 import { ServerError } from '@errors/server.error';
 import { logger } from '@logger';
 import { GraphQLError } from 'graphql';
@@ -8,17 +9,22 @@ export const ErrorHandlerMiddleware: MiddlewareFn<IContext> = async ({ info }, n
   try {
     return await next();
   } catch (error) {
-    logger.error(error, `An error occurred executing ${info.path.typename} ${info.fieldName}`);
+    logger.error(error, `Error in ${info.path.typename}.${info.fieldName}`);
+    const timestamp = new Date().toISOString();
 
     if (error instanceof ServerError) {
-      throw new GraphQLError(error.message, {
-        extensions: error.extensions,
+      return new GraphQLError(error.message, {
+        extensions: {
+          ...error.extensions,
+          timestamp,
+        },
       });
     }
 
-    throw new GraphQLError('An unexpected error occurred', {
+    return new GraphQLError('An unexpected error occurred', {
       extensions: {
-        code: 'UNEXPECTED_ERROR',
+        code: ErrorCodes.INTERNAL_SERVER_ERROR,
+        timestamp,
       },
     });
   }

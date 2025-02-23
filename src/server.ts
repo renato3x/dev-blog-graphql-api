@@ -15,16 +15,29 @@ export async function bootstrap(): Promise<ApolloServer<BaseContext>> {
     globalMiddlewares: [LoggerMiddleware, ErrorHandlerMiddleware],
   });
 
-  const server = new ApolloServer({ schema });
+  const server = new ApolloServer({
+    schema,
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    formatError: (error) => {
+      if (error.extensions?.stacktrace) {
+        delete error.extensions.stacktrace;
+      }
+
+      return {
+        message: error.message,
+        extensions: error.extensions,
+      };
+    },
+  });
 
   const { url } = await startStandaloneServer(server, {
     listen: {
       port: +process.env.SERVER_PORT,
-      path: '/api/graphql/',
+      path: '/graphql/',
     },
   });
 
-  logger.info(`Server open in ${url}api/graphql/`);
+  logger.info(`Server open in ${url}graphql/`);
 
   return server;
 }

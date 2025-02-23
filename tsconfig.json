@@ -30,6 +30,7 @@
       "@ioc/*": ["./src/ioc/*"],
       "@errors/*": ["./src/errors/*"],
       "@logger": ["./src/logger/index.ts"],
+      "@enums/*": ["./src/enums/*"],
     },
     "typeRoots": ["node_modules/@types", "src/@types"]
   }

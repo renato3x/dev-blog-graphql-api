@@ -1,1 +1,1 @@
-export interface IContext {}
+export type IContext = unknown;

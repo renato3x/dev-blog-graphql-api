@@ -6,6 +6,7 @@ import { CreateUserInput } from '@dto/create-user.input';
 import { HashService } from './hash.service';
 import { ServerError } from '@errors/server.error';
 import { UpdateUserInput } from '@dto/update-user.input';
+import { ErrorCodes } from '@enums/error-codes.enum';
 
 @injectable()
 export class UserService {
@@ -28,9 +29,7 @@ export class UserService {
       return publicUser;
     }
 
-    throw new ServerError('User not found', {
-      code: 'USER_NOT_FOUND',
-    });
+    throw new ServerError('User not found', ErrorCodes.NOT_FOUND);
   }
 
   async create(data: CreateUserInput): Promise<User> {
@@ -59,9 +58,7 @@ export class UserService {
       return publicUser;
     }
 
-    throw new ServerError('User not found', {
-      code: 'USER_NOT_FOUND',
-    });
+    throw new ServerError('User not found', ErrorCodes.NOT_FOUND);
   }
 
   async delete(id: string): Promise<void> {
@@ -72,8 +69,6 @@ export class UserService {
       return;
     }
 
-    throw new ServerError('User not found', {
-      code: 'USER_NOT_FOUND',
-    });
+    throw new ServerError('User not found', ErrorCodes.NOT_FOUND);
   }
 }

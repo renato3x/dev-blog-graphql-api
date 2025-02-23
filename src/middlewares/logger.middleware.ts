@@ -3,6 +3,6 @@ import { logger } from '@logger';
 import { MiddlewareFn } from 'type-graphql';
 
 export const LoggerMiddleware: MiddlewareFn<IContext> = ({ info }, next) => {
-  logger.info(`Executing ${info.operation.operation} ${info.fieldName}`);
+  logger.info(`Running ${info.path.typename}.${info.fieldName}`);
   return next();
 };
