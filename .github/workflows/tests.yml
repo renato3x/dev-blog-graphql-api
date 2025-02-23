@@ -18,7 +18,7 @@ jobs:
           cache: 'pnpm'
       
       - name: Install pnpm
-        run: npm install --global corepack@latest && corepack enable pnpm
+        run: corepack enable && corepack install
 
       - name: Install dependencies
         run: pnpm --shamefully-hoist
