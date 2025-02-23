@@ -3,12 +3,11 @@ import { UserResolver } from '@resolvers/user.resolver';
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { logger } from '@logger';
-import { BaseContext } from '@apollo/server';
 import { container } from '@ioc/container';
 import { LoggerMiddleware } from '@middlewares/logger.middleware';
 import { ErrorHandlerMiddleware } from '@middlewares/error-handler.middleware';
 
-export async function bootstrap(): Promise<ApolloServer<BaseContext>> {
+export async function bootstrap(): Promise<{ url: string }> {
   const schema = await buildSchema({
     resolvers: [UserResolver],
     container: () => container,
@@ -37,7 +36,8 @@ export async function bootstrap(): Promise<ApolloServer<BaseContext>> {
     },
   });
 
-  logger.info(`Server open in ${url}graphql/`);
+  const finalUrl = `${url}graphql/`;
+  logger.info(`Server open in ${finalUrl}`);
 
-  return server;
+  return { url: finalUrl };
 }
