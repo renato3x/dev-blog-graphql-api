@@ -18,7 +18,7 @@ jobs:
           cache: 'yarn'
 
       - name: Install dependencies
-        run: yarn
+        run: pnpm
       
       - name: Setup environment variables
         run: |
@@ -26,7 +26,7 @@ jobs:
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
 
       - name: Run development migrations
-        run: yarn db:migrate:dev
+        run: pnpm db:migrate:dev
       
       - name: Run tests
-        run: yarn test
+        run: pnpm test
