@@ -32,6 +32,37 @@ describe('User queries', () => {
     expect(Array.isArray(response.body.data.users)).toBe(true);
   });
 
+  test('block user creation if name field is missing', async () => {
+    const CREATE_USER_MUTATION = `
+      ${USER_FRAGMENT}
+      mutation($data: CreateUserInput!) {
+        createUser(data: $data) {
+          ...UserFragment
+        }
+      }
+    `;
+
+    const response = await request(url)
+      .post('/')
+      .send({
+        query: CREATE_USER_MUTATION,
+        variables: {
+          data: {
+            username: faker.internet.username(),
+            email: faker.internet.email().toLowerCase(),
+            password: faker.internet.password({ length: 8 }),
+          },
+        },
+      });
+
+    expect(response.body.errors).toBeDefined();
+    expect(response.body.errors[0].message).toBe('Invalid data');
+    expect(response.body.errors[0].extensions).toBeDefined();
+    expect(response.body.errors[0].extensions.code).toBe('BAD_REQUEST');
+    expect(response.body.errors[0].extensions.errors).toBeDefined();
+    expect(response.body.errors[0].extensions.errors).toContain('name is required');
+  });
+
   test('create a new user and returns the saved user', async () => {
     const CREATE_USER_MUTATION = `
       ${USER_FRAGMENT}

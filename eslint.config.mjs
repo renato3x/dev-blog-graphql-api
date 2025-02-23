@@ -33,7 +33,7 @@ export default [
   },
   {
     rules: {
-      quotes: ['error', 'single'],
+      quotes: ['error', 'single', { avoidEscape: true }],
       eqeqeq: ['error', 'always'],
       semi: ['error', 'always'],
       curly: ['error', 'all'],
