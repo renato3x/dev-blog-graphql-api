@@ -2,9 +2,10 @@ import { User } from '@models/user.schema';
 import { UserService } from '@services/user.service';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '@ioc/types';
-import { Arg, Mutation, Query, Resolver } from 'type-graphql';
-import { CreateUserInput } from '@dto/create-user.input';
+import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
+import { CreateUserInput, CreateUserInputSchema } from '@dto/create-user.input';
 import { UpdateUserInput } from '@dto/update-user.input';
+import { InputValidationMiddleware } from '@middlewares/input-validation.middleware';
 
 @Resolver()
 @injectable()
@@ -22,6 +23,7 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
+  @UseMiddleware(InputValidationMiddleware(CreateUserInputSchema, 'data'))
   async createUser(@Arg('data', () => CreateUserInput) data: CreateUserInput): Promise<User> {
     const user = await this.userService.create(data);
     return user;
