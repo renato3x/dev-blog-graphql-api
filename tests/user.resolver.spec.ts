@@ -32,67 +32,464 @@ describe('User queries', () => {
     expect(Array.isArray(response.body.data.users)).toBe(true);
   });
 
-  test('block user creation if name field is missing', async () => {
-    const CREATE_USER_MUTATION = `
-      ${USER_FRAGMENT}
-      mutation($data: JSON) {
-        createUser(data: $data) {
-          ...UserFragment
-        }
-      }
-    `;
+  describe('create user mutation', () => {
+    describe('name field validations', () => {
+      test('block user creation if name field is missing', async () => {
+        const CREATE_USER_MUTATION = `
+          ${USER_FRAGMENT}
+          mutation($data: JSON) {
+            createUser(data: $data) {
+              ...UserFragment
+            }
+          }
+        `;
 
-    const response = await request(url)
-      .post('/')
-      .send({
-        query: CREATE_USER_MUTATION,
-        variables: {
-          data: {
-            username: faker.internet.username(),
-            email: faker.internet.email().toLowerCase(),
-            password: faker.internet.password({ length: 8 }),
-          },
-        },
+        const response = await request(url)
+          .post('/')
+          .send({
+            query: CREATE_USER_MUTATION,
+            variables: {
+              data: {
+                username: faker.internet.username(),
+                email: faker.internet.email().toLowerCase(),
+                password: faker.internet.password({ length: 8 }),
+              },
+            },
+          });
+
+        expect(response.body.errors).toBeDefined();
+        expect(response.body.errors[0].message).toBe('Invalid data');
+        expect(response.body.errors[0].extensions).toBeDefined();
+        expect(response.body.errors[0].extensions.code).toBe('BAD_REQUEST');
+        expect(response.body.errors[0].extensions.errors).toBeDefined();
+        expect(response.body.errors[0].extensions.errors).toContain('name is required');
       });
 
-    expect(response.body.errors).toBeDefined();
-    expect(response.body.errors[0].message).toBe('Invalid data');
-    expect(response.body.errors[0].extensions).toBeDefined();
-    expect(response.body.errors[0].extensions.code).toBe('BAD_REQUEST');
-    expect(response.body.errors[0].extensions.errors).toBeDefined();
-    expect(response.body.errors[0].extensions.errors).toContain('name is required');
-  });
+      test('block user creation if name field in not a string', async () => {
+        const CREATE_USER_MUTATION = `
+          ${USER_FRAGMENT}
+          mutation($data: JSON) {
+            createUser(data: $data) {
+              ...UserFragment
+            }
+          }
+        `;
 
-  test('create a new user and returns the saved user', async () => {
-    const CREATE_USER_MUTATION = `
-      ${USER_FRAGMENT}
-      mutation($data: JSON) {
-        createUser(data: $data) {
-          ...UserFragment
-        }
-      }
-    `;
+        const response = await request(url)
+          .post('/')
+          .send({
+            query: CREATE_USER_MUTATION,
+            variables: {
+              data: {
+                name: 1149174,
+                username: faker.internet.username(),
+                email: faker.internet.email().toLowerCase(),
+                password: faker.internet.password({ length: 8 }),
+              },
+            },
+          });
 
-    const response = await request(url)
-      .post('/')
-      .send({
-        query: CREATE_USER_MUTATION,
-        variables: {
-          data: {
-            name: faker.person.firstName(),
-            username: faker.internet.username(),
-            email: faker.internet.email().toLowerCase(),
-            password: faker.internet.password({ length: 8 }),
-          },
-        },
+        expect(response.body.errors).toBeDefined();
+        expect(response.body.errors[0].message).toBe('Invalid data');
+        expect(response.body.errors[0].extensions).toBeDefined();
+        expect(response.body.errors[0].extensions.code).toBe('BAD_REQUEST');
+        expect(response.body.errors[0].extensions.errors).toBeDefined();
+        expect(response.body.errors[0].extensions.errors).toContain('name must be a string');
       });
 
-    expect(response.body.errors).toBeUndefined();
-    expect(response.body.data.createUser).toHaveProperty('id');
-    expect(response.body.data.createUser).toHaveProperty('createdAt');
-    expect(response.body.data.createUser).toHaveProperty('updatedAt');
+      test('block user creation if name field is an empty string', async () => {
+        const CREATE_USER_MUTATION = `
+          ${USER_FRAGMENT}
+          mutation($data: JSON) {
+            createUser(data: $data) {
+              ...UserFragment
+            }
+          }
+        `;
 
-    userId = response.body.data.createUser.id as string;
+        const response = await request(url)
+          .post('/')
+          .send({
+            query: CREATE_USER_MUTATION,
+            variables: {
+              data: {
+                name: '',
+                username: faker.internet.username(),
+                email: faker.internet.email().toLowerCase(),
+                password: faker.internet.password({ length: 8 }),
+              },
+            },
+          });
+
+        expect(response.body.errors).toBeDefined();
+        expect(response.body.errors[0].message).toBe('Invalid data');
+        expect(response.body.errors[0].extensions).toBeDefined();
+        expect(response.body.errors[0].extensions.code).toBe('BAD_REQUEST');
+        expect(response.body.errors[0].extensions.errors).toBeDefined();
+        expect(response.body.errors[0].extensions.errors).toContain('name cannot be empty');
+      });
+
+      test('block user creation if name field contains numbers', async () => {
+        const CREATE_USER_MUTATION = `
+          ${USER_FRAGMENT}
+          mutation($data: JSON) {
+            createUser(data: $data) {
+              ...UserFragment
+            }
+          }
+        `;
+
+        const response = await request(url)
+          .post('/')
+          .send({
+            query: CREATE_USER_MUTATION,
+            variables: {
+              data: {
+                name: 'john123',
+                username: faker.internet.username(),
+                email: faker.internet.email().toLowerCase(),
+                password: faker.internet.password({ length: 8 }),
+              },
+            },
+          });
+
+        expect(response.body.errors).toBeDefined();
+        expect(response.body.errors[0].message).toBe('Invalid data');
+        expect(response.body.errors[0].extensions).toBeDefined();
+        expect(response.body.errors[0].extensions.code).toBe('BAD_REQUEST');
+        expect(response.body.errors[0].extensions.errors).toBeDefined();
+        expect(response.body.errors[0].extensions.errors).toContain('name cannot have numbers or symbols');
+      });
+
+      test('block user creation if name field contains symbols', async () => {
+        const CREATE_USER_MUTATION = `
+          ${USER_FRAGMENT}
+          mutation($data: JSON) {
+            createUser(data: $data) {
+              ...UserFragment
+            }
+          }
+        `;
+
+        const response = await request(url)
+          .post('/')
+          .send({
+            query: CREATE_USER_MUTATION,
+            variables: {
+              data: {
+                name: 'john_doe',
+                username: faker.internet.username(),
+                email: faker.internet.email().toLowerCase(),
+                password: faker.internet.password({ length: 8 }),
+              },
+            },
+          });
+
+        expect(response.body.errors).toBeDefined();
+        expect(response.body.errors[0].message).toBe('Invalid data');
+        expect(response.body.errors[0].extensions).toBeDefined();
+        expect(response.body.errors[0].extensions.code).toBe('BAD_REQUEST');
+        expect(response.body.errors[0].extensions.errors).toBeDefined();
+        expect(response.body.errors[0].extensions.errors).toContain('name cannot have numbers or symbols');
+      });
+    });
+
+    describe('username field validations', () => {
+      test('block user creation if username field is missing', async () => {
+        const CREATE_USER_MUTATION = `
+          ${USER_FRAGMENT}
+          mutation($data: JSON) {
+            createUser(data: $data) {
+              ...UserFragment
+            }
+          }
+        `;
+
+        const response = await request(url)
+          .post('/')
+          .send({
+            query: CREATE_USER_MUTATION,
+            variables: {
+              data: {
+                name: faker.person.firstName(),
+                email: faker.internet.email().toLowerCase(),
+                password: faker.internet.password({ length: 8 }),
+              },
+            },
+          });
+
+        expect(response.body.errors).toBeDefined();
+        expect(response.body.errors[0].message).toBe('Invalid data');
+        expect(response.body.errors[0].extensions).toBeDefined();
+        expect(response.body.errors[0].extensions.code).toBe('BAD_REQUEST');
+        expect(response.body.errors[0].extensions.errors).toBeDefined();
+        expect(response.body.errors[0].extensions.errors).toContain('username is required');
+      });
+
+      test('block user creation if username field is not a string', async () => {
+        const CREATE_USER_MUTATION = `
+          ${USER_FRAGMENT}
+          mutation($data: JSON) {
+            createUser(data: $data) {
+              ...UserFragment
+            }
+          }
+        `;
+
+        const response = await request(url)
+          .post('/')
+          .send({
+            query: CREATE_USER_MUTATION,
+            variables: {
+              data: {
+                name: faker.person.firstName(),
+                username: 121414,
+                email: faker.internet.email().toLowerCase(),
+                password: faker.internet.password({ length: 8 }),
+              },
+            },
+          });
+
+        expect(response.body.errors).toBeDefined();
+        expect(response.body.errors[0].message).toBe('Invalid data');
+        expect(response.body.errors[0].extensions).toBeDefined();
+        expect(response.body.errors[0].extensions.code).toBe('BAD_REQUEST');
+        expect(response.body.errors[0].extensions.errors).toBeDefined();
+        expect(response.body.errors[0].extensions.errors).toContain('username must be a string');
+      });
+    });
+
+    describe('email field validations', () => {
+      test('block user creation if email field is missing', async () => {
+        const CREATE_USER_MUTATION = `
+          ${USER_FRAGMENT}
+          mutation($data: JSON) {
+            createUser(data: $data) {
+              ...UserFragment
+            }
+          }
+        `;
+
+        const response = await request(url)
+          .post('/')
+          .send({
+            query: CREATE_USER_MUTATION,
+            variables: {
+              data: {
+                name: faker.person.firstName(),
+                username: faker.internet.username(),
+                password: faker.internet.password({ length: 8 }),
+              },
+            },
+          });
+
+        expect(response.body.errors).toBeDefined();
+        expect(response.body.errors[0].message).toBe('Invalid data');
+        expect(response.body.errors[0].extensions).toBeDefined();
+        expect(response.body.errors[0].extensions.code).toBe('BAD_REQUEST');
+        expect(response.body.errors[0].extensions.errors).toBeDefined();
+        expect(response.body.errors[0].extensions.errors).toContain('email is required');
+      });
+
+      test('block user creation if email field is not a string', async () => {
+        const CREATE_USER_MUTATION = `
+          ${USER_FRAGMENT}
+          mutation($data: JSON) {
+            createUser(data: $data) {
+              ...UserFragment
+            }
+          }
+        `;
+
+        const response = await request(url)
+          .post('/')
+          .send({
+            query: CREATE_USER_MUTATION,
+            variables: {
+              data: {
+                name: faker.person.firstName(),
+                username: faker.internet.username(),
+                email: 14124134,
+                password: faker.internet.password({ length: 8 }),
+              },
+            },
+          });
+
+        expect(response.body.errors).toBeDefined();
+        expect(response.body.errors[0].message).toBe('Invalid data');
+        expect(response.body.errors[0].extensions).toBeDefined();
+        expect(response.body.errors[0].extensions.code).toBe('BAD_REQUEST');
+        expect(response.body.errors[0].extensions.errors).toBeDefined();
+        expect(response.body.errors[0].extensions.errors).toContain('email must be a string');
+      });
+    });
+
+    describe('password field validations', () => {
+      test('block user creation if password field is missing', async () => {
+        const CREATE_USER_MUTATION = `
+          ${USER_FRAGMENT}
+          mutation($data: JSON) {
+            createUser(data: $data) {
+              ...UserFragment
+            }
+          }
+        `;
+
+        const response = await request(url)
+          .post('/')
+          .send({
+            query: CREATE_USER_MUTATION,
+            variables: {
+              data: {
+                name: faker.person.firstName(),
+                username: faker.internet.username(),
+                email: faker.internet.email().toLowerCase(),
+              },
+            },
+          });
+
+        expect(response.body.errors).toBeDefined();
+        expect(response.body.errors[0].message).toBe('Invalid data');
+        expect(response.body.errors[0].extensions).toBeDefined();
+        expect(response.body.errors[0].extensions.code).toBe('BAD_REQUEST');
+        expect(response.body.errors[0].extensions.errors).toBeDefined();
+        expect(response.body.errors[0].extensions.errors).toContain('password is required');
+      });
+
+      test('block user creation if password field is not a string', async () => {
+        const CREATE_USER_MUTATION = `
+          ${USER_FRAGMENT}
+          mutation($data: JSON) {
+            createUser(data: $data) {
+              ...UserFragment
+            }
+          }
+        `;
+
+        const response = await request(url)
+          .post('/')
+          .send({
+            query: CREATE_USER_MUTATION,
+            variables: {
+              data: {
+                name: faker.person.firstName(),
+                username: faker.internet.username(),
+                email: faker.internet.email().toLowerCase(),
+                password: 141341,
+              },
+            },
+          });
+
+        expect(response.body.errors).toBeDefined();
+        expect(response.body.errors[0].message).toBe('Invalid data');
+        expect(response.body.errors[0].extensions).toBeDefined();
+        expect(response.body.errors[0].extensions.code).toBe('BAD_REQUEST');
+        expect(response.body.errors[0].extensions.errors).toBeDefined();
+        expect(response.body.errors[0].extensions.errors).toContain('password must be a string');
+      });
+    });
+
+    describe('biography field validations', () => {
+      test('block user creation if biography field is not a string', async () => {
+        const CREATE_USER_MUTATION = `
+          ${USER_FRAGMENT}
+          mutation($data: JSON) {
+            createUser(data: $data) {
+              ...UserFragment
+            }
+          }
+        `;
+
+        const response = await request(url)
+          .post('/')
+          .send({
+            query: CREATE_USER_MUTATION,
+            variables: {
+              data: {
+                name: faker.person.firstName(),
+                username: faker.internet.username(),
+                email: faker.internet.email().toLowerCase(),
+                password: faker.internet.password(),
+                biography: 131414,
+              },
+            },
+          });
+
+        expect(response.body.errors).toBeDefined();
+        expect(response.body.errors[0].message).toBe('Invalid data');
+        expect(response.body.errors[0].extensions).toBeDefined();
+        expect(response.body.errors[0].extensions.code).toBe('BAD_REQUEST');
+        expect(response.body.errors[0].extensions.errors).toBeDefined();
+        expect(response.body.errors[0].extensions.errors).toContain('biography must be a string');
+      });
+    });
+
+    describe('profileImage validations', () => {
+      test('block user creation if profileImage is not a string', async () => {
+        const CREATE_USER_MUTATION = `
+          ${USER_FRAGMENT}
+          mutation($data: JSON) {
+            createUser(data: $data) {
+              ...UserFragment
+            }
+          }
+        `;
+
+        const response = await request(url)
+          .post('/')
+          .send({
+            query: CREATE_USER_MUTATION,
+            variables: {
+              data: {
+                name: faker.person.firstName(),
+                username: faker.internet.username(),
+                email: faker.internet.email().toLowerCase(),
+                password: faker.internet.password(),
+                profileImage: 131414,
+              },
+            },
+          });
+
+        expect(response.body.errors).toBeDefined();
+        expect(response.body.errors[0].message).toBe('Invalid data');
+        expect(response.body.errors[0].extensions).toBeDefined();
+        expect(response.body.errors[0].extensions.code).toBe('BAD_REQUEST');
+        expect(response.body.errors[0].extensions.errors).toBeDefined();
+        expect(response.body.errors[0].extensions.errors).toContain('profileImage must be a string');
+      });
+    });
+
+    test('create a new user and returns the saved user', async () => {
+      const CREATE_USER_MUTATION = `
+        ${USER_FRAGMENT}
+        mutation($data: JSON) {
+          createUser(data: $data) {
+            ...UserFragment
+          }
+        }
+      `;
+
+      const response = await request(url)
+        .post('/')
+        .send({
+          query: CREATE_USER_MUTATION,
+          variables: {
+            data: {
+              name: faker.person.firstName(),
+              username: faker.internet.username(),
+              email: faker.internet.email().toLowerCase(),
+              password: faker.internet.password({ length: 8 }),
+            },
+          },
+        });
+
+      expect(response.body.errors).toBeUndefined();
+      expect(response.body.data.createUser).toHaveProperty('id');
+      expect(response.body.data.createUser).toHaveProperty('createdAt');
+      expect(response.body.data.createUser).toHaveProperty('updatedAt');
+
+      userId = response.body.data.createUser.id as string;
+    });
   });
 
   test('search and return an user by id', async () => {
