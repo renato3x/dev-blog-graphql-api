@@ -4,7 +4,7 @@ import { inject, injectable } from 'inversify';
 import { TYPES } from '@ioc/types';
 import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
 import { CreateUserDto, CreateUserDtoSchema } from '@dto/create-user.dto';
-import { UpdateUserInput } from '@dto/update-user.input';
+import { UpdateUserDto } from '@dto/update-user.dto';
 import { InputValidationMiddleware } from '@middlewares/input-validation.middleware';
 import { JSONResolver } from 'graphql-scalars';
 
@@ -33,7 +33,7 @@ export class UserResolver {
   @Mutation(() => User)
   async updateUser(
     @Arg('id', () => String) id: string,
-    @Arg('data', () => UpdateUserInput) data: UpdateUserInput,
+    @Arg('data', () => JSONResolver) data: UpdateUserDto,
   ): Promise<User> {
     const user = await this.userService.update(id, data);
     return user;

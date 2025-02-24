@@ -98,7 +98,7 @@ describe('User queries', () => {
   test('search and return an user by id', async () => {
     const SEARCH_USER_BY_ID_QUERY = `
       ${USER_FRAGMENT}
-      query($id: String!) {
+      query($id: String) {
         user(id: $id) {
           ...UserFragment
         }
@@ -125,7 +125,7 @@ describe('User queries', () => {
   test('update data from user by id', async () => {
     const UPDATE_USER_DATA_MUTATION = `
       ${USER_FRAGMENT}
-      mutation($id: String!, $data: UpdateUserInput!) {
+      mutation($id: String, $data: JSON) {
         updateUser(id: $id, data: $data) {
           ...UserFragment
         }
@@ -157,7 +157,7 @@ describe('User queries', () => {
 
   test('delete an user by id', async () => {
     const DELETE_USER_MUTATION = `
-      mutation($id: String!) {
+      mutation($id: String) {
         deleteUser(id: $id)
       }
     `;

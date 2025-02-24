@@ -5,7 +5,7 @@ import { TYPES } from '@ioc/types';
 import { CreateUserDto } from '@dto/create-user.dto';
 import { HashService } from './hash.service';
 import { ServerError } from '@errors/server.error';
-import { UpdateUserInput } from '@dto/update-user.input';
+import { UpdateUserDto } from '@dto/update-user.dto';
 import { ErrorCodes } from '@enums/error-codes.enum';
 
 @injectable()
@@ -36,15 +36,13 @@ export class UserService {
     const hash = HashService.createHash(data.password);
     const user = await this.userRepository.create({
       ...data,
-      profileImage: data.profileImage || null,
-      biography: data.biography || null,
       password: hash,
     });
 
     return this.removePassword(user);
   }
 
-  async update(id: string, data: UpdateUserInput): Promise<User> {
+  async update(id: string, data: UpdateUserDto): Promise<User> {
     const userExists = await this.userRepository.findById(id);
 
     if (!userExists) {
