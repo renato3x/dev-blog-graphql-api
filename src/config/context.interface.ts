@@ -1,1 +1,3 @@
-export type IContext = unknown;
+export type IContext = {
+  [key: string]: unknown;
+};

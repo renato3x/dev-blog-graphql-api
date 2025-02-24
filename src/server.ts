@@ -6,6 +6,7 @@ import { logger } from '@logger';
 import { container } from '@ioc/container';
 import { LoggerMiddleware } from '@middlewares/logger.middleware';
 import { ErrorHandlerMiddleware } from '@middlewares/error-handler.middleware';
+import { formatError } from '@config/format-error';
 
 export async function bootstrap(): Promise<{ url: string }> {
   const schema = await buildSchema({
@@ -16,17 +17,7 @@ export async function bootstrap(): Promise<{ url: string }> {
 
   const server = new ApolloServer({
     schema,
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    formatError: (error) => {
-      if (error.extensions?.stacktrace) {
-        delete error.extensions.stacktrace;
-      }
-
-      return {
-        message: error.message,
-        extensions: error.extensions,
-      };
-    },
+    formatError,
   });
 
   const { url } = await startStandaloneServer(server, {
