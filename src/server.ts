@@ -13,6 +13,7 @@ export async function bootstrap(): Promise<{ url: string }> {
     resolvers: [UserResolver],
     container: () => container,
     globalMiddlewares: [LoggerMiddleware, ErrorHandlerMiddleware],
+    nullableByDefault: true,
   });
 
   const server = new ApolloServer({

@@ -1,28 +1,6 @@
-import { Field, InputType } from 'type-graphql';
 import z from 'zod';
 
-@InputType()
-export class CreateUserInput {
-  @Field(() => String)
-  name: string;
-
-  @Field(() => String)
-  username: string;
-
-  @Field(() => String)
-  email: string;
-
-  @Field(() => String)
-  password: string;
-
-  @Field(() => String, { nullable: true })
-  biography: string | null;
-
-  @Field(() => String, { nullable: true })
-  profileImage: string | null;
-}
-
-export const CreateUserInputSchema = z.object({
+export const CreateUserDtoSchema = z.object({
   name: z
     .string({
       required_error: 'name is required',
@@ -57,3 +35,5 @@ export const CreateUserInputSchema = z.object({
     .url('profileImage must be an url')
     .optional(),
 });
+
+export type CreateUserDto = z.infer<typeof CreateUserDtoSchema>;

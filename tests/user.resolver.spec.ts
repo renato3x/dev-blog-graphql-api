@@ -35,7 +35,7 @@ describe('User queries', () => {
   test('block user creation if name field is missing', async () => {
     const CREATE_USER_MUTATION = `
       ${USER_FRAGMENT}
-      mutation($data: CreateUserInput!) {
+      mutation($data: JSON) {
         createUser(data: $data) {
           ...UserFragment
         }
@@ -66,7 +66,7 @@ describe('User queries', () => {
   test('create a new user and returns the saved user', async () => {
     const CREATE_USER_MUTATION = `
       ${USER_FRAGMENT}
-      mutation($data: CreateUserInput!) {
+      mutation($data: JSON) {
         createUser(data: $data) {
           ...UserFragment
         }
