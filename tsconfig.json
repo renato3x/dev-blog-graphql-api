@@ -19,18 +19,7 @@
     "outDir": "dist",
     "strictPropertyInitialization": false,
     "paths": {
-      "@models/*": ["./src/models/*"],
-      "@resolvers/*": ["./src/resolvers/*"],
-      "@repositories/*": ["./src/repositories/*"],
-      "@database/*": ["./src/database/*"],
-      "@services/*": ["./src/services/*"],
-      "@config/*": ["./src/config/*"],
-      "@middlewares/*": ["./src/middlewares/*"],
-      "@dto/*": ["./src/dto/*"],
-      "@ioc/*": ["./src/ioc/*"],
-      "@errors/*": ["./src/errors/*"],
-      "@logger": ["./src/logger/index.ts"],
-      "@enums/*": ["./src/enums/*"],
+      "@hello-world/*": ["src/hello-world/*"]
     },
     "typeRoots": ["node_modules/@types", "src/@types"]
   }
