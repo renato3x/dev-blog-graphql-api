@@ -13,7 +13,7 @@ export async function bootstrap(): Promise<{ url: string }> {
     schema,
   });
 
-  const port = +process.env.SERVER_PORT || 3000
+  const port = +process.env.SERVER_PORT || 3000;
 
   const { url } = await startStandaloneServer(server, {
     listen: {
