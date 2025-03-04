@@ -1,4 +1,4 @@
-name: Server Tests
+name: GraphQL Tests
 
 on:
   workflow_dispatch:
@@ -23,14 +23,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --shamefully-hoist
-      
-      - name: Setup environment variables
-        run: |
-          echo "SERVER_PORT=${{ secrets.SERVER_PORT }}" >> .env
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
-
-      - name: Run development migrations
-        run: pnpm db:migrate:dev
       
       - name: Run tests
         run: pnpm test
