@@ -9,7 +9,9 @@ export async function bootstrap(): Promise<{ url: string }> {
     resolvers: [HelloWorldResolver],
   });
 
-  const server = new ApolloServer({ schema });
+  const server = new ApolloServer({
+    schema,
+  });
 
   const { url } = await startStandaloneServer(server, {
     listen: {

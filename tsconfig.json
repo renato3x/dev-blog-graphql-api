@@ -19,7 +19,9 @@
     "outDir": "dist",
     "strictPropertyInitialization": false,
     "paths": {
-      "@hello-world/*": ["src/hello-world/*"]
+      "@/*": ["src/*"],
+      "@hello-world/*": ["src/hello-world/*"],
+      "@tests/*": ["tests/*"]
     },
     "typeRoots": ["node_modules/@types", "src/@types"]
   }
