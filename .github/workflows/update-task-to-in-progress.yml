@@ -1,0 +1,50 @@
+name: Update Task Status
+
+on:
+  issues:
+    types: [assigned]
+
+jobs:
+  update_status:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@v2
+
+    - name: Move task to "In Progress"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Extract the issue number and repository details from the GitHub context
+        ISSUE_NUMBER=$(jq -r '.issue.number' "$GITHUB_EVENT_PATH")
+        REPO_OWNER=$(jq -r '.repository.owner.login' "$GITHUB_EVENT_PATH")
+        REPO_NAME=$(jq -r '.repository.name' "$GITHUB_EVENT_PATH")
+
+        # Get the project card ID associated with the issue
+        PROJECT_CARD_ID=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github.inertia-preview+json" \
+          "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER" \
+          | jq -r '.project_card.id')
+
+        # Get the project columns and find the IDs for "Todo" and "In Progress"
+        PROJECT_COLUMNS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github.inertia-preview+json" \
+          "https://api.github.com/projects/columns" \
+          | jq -r '.[] | select(.name == "Todo" or .name == "In Progress") | {id: .id, name: .name}')
+
+        TODO_COLUMN_ID=$(echo "$PROJECT_COLUMNS" | jq -r 'select(.name == "Todo") | .id')
+        IN_PROGRESS_COLUMN_ID=$(echo "$PROJECT_COLUMNS" | jq -r 'select(.name == "In Progress") | .id')
+
+        # Move the project card to the "In Progress" column if it is currently in the "Todo" column
+        CURRENT_COLUMN_ID=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github.inertia-preview+json" \
+          "https://api.github.com/projects/columns/cards/$PROJECT_CARD_ID" \
+          | jq -r '.column_id')
+
+        if [ "$CURRENT_COLUMN_ID" == "$TODO_COLUMN_ID" ]; then
+          curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.inertia-preview+json" \
+            -d '{"position": "top", "column_id": '"$IN_PROGRESS_COLUMN_ID"'}' \
+            "https://api.github.com/projects/columns/cards/$PROJECT_CARD_ID/moves"
+        fi
